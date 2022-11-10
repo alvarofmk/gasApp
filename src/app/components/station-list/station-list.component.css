@@ -1,0 +1,8 @@
+.container{
+    flex-wrap: wrap;
+    width: 80%;
+    margin: auto;
+}
+.gasStation{
+    width: 20%;
+}

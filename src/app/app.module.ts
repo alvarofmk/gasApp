@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StationListComponent } from './components/station-list/station-list.component';
+import { MaterialImportsModule } from './material-imports/material-imports.module';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -18,7 +20,12 @@ import { StationListComponent } from './components/station-list/station-list.com
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialImportsModule,
+    FormsModule
+  ],
+  exports: [
+    MaterialImportsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

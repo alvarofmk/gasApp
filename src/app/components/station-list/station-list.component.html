@@ -1,9 +1,26 @@
-<ul>
-    <li *ngFor="let station of stationPrices.ListaEESSPrecio">{{station['Rótulo']}} {{station['Dirección']}}
-        <ul>
-            <li>Precio del gasóleo: <span>{{station['Precio Gasoleo A']}}</span></li>
-            <li>Precio de la gasolina: <span>{{station['Precio Gasolina 95 E5']}}</span></li>
-            <li>Precio del hidrógeno: <span>{{station['Precio Hidrogeno']}}</span></li>
-        </ul>
-    </li>
-</ul>
+<mat-form-field appearance="fill">
+    <mat-label>Seleccione combustible</mat-label>
+    <mat-select [(ngModel)]="pricePicked" (selectionChange)="changePicked()">
+      <mat-option [value]="1">Biodiesel</mat-option>
+      <mat-option [value]="2">Bioetanol</mat-option>
+      <mat-option [value]="3">Gas Natural</mat-option>
+      <mat-option [value]="4">Gasoleo</mat-option>
+      <mat-option [value]="5">Gasoleo Premium</mat-option>
+      <mat-option [value]="6">Gasolina 95</mat-option>
+      <mat-option [value]="7">Gasolina 98</mat-option>
+      <mat-option [value]="8">Hidrogeno</mat-option>
+    </mat-select>
+</mat-form-field>
+<div class="container">
+    <ng-container *ngFor="let station of stations">
+        <mat-card class="gasStation" *ngIf="station[price] != ''">
+            <mat-card-title>{{station['Rótulo']}}</mat-card-title>
+            <mat-card-subtitle>{{station['Dirección']}}</mat-card-subtitle>
+            <mat-card-content>
+                <ul>
+                    <li>Precio: <span>{{station[price]}}</span></li>
+                </ul>
+            </mat-card-content>
+        </mat-card>
+    </ng-container>
+</div>
