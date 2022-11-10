@@ -11,14 +11,46 @@
       <mat-option [value]="8">Hidrogeno</mat-option>
     </mat-select>
 </mat-form-field>
+<mat-icon (click)="invertSort()">sort</mat-icon>
+<mat-slider
+    [max]="maxPriceToShow"
+    [min]="0"
+    step="0.01"
+    [thumbLabel]="true"
+    [(ngModel)]="minPriceToShow"
+    aria-labelledby="example-name-label">
+</mat-slider>
+<mat-slider
+    [max]="5.00"
+    [min]="minPriceToShow"
+    step="0.01"
+    [thumbLabel]="true"
+    [(ngModel)]="maxPriceToShow"
+    aria-labelledby="example-name-label">
+</mat-slider>
+<button mat-stroked-button color="accent" (click)="reFilter()">Filter by price range</button>
+<mat-form-field appearance="fill">
+    <mat-label>Seleccione provincia</mat-label>
+    <mat-select [(ngModel)]="provincePicked" (selectionChange)="reFilter()">
+        <mat-option [value]="">--</mat-option>
+        <mat-option [value]="province.IDPovincia" *ngFor="let province of provinces">{{province.Provincia}}</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill" *ngIf="provincePicked != '' && provincePicked != undefined">
+    <mat-label>Seleccione municipio</mat-label>
+    <mat-select [(ngModel)]="municipalityPicked" (selectionChange)="reFilter()">
+        <mat-option [value]="">--</mat-option>
+      <mat-option [value]="municipality.IDMunicipio" *ngFor="let municipality of municipalities">{{municipality.Municipio}}</mat-option>
+    </mat-select>
+</mat-form-field>
 <div class="container">
     <ng-container *ngFor="let station of stations">
-        <mat-card class="gasStation" *ngIf="station[price] != ''">
+        <mat-card class="gasStation">
             <mat-card-title>{{station['Rótulo']}}</mat-card-title>
             <mat-card-subtitle>{{station['Dirección']}}</mat-card-subtitle>
             <mat-card-content>
                 <ul>
-                    <li>Precio: <span>{{station[price]}}</span></li>
+                    <li>Precio: <span>{{station[price]}} € / litro</span></li>
                 </ul>
             </mat-card-content>
         </mat-card>
