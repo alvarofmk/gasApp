@@ -1,0 +1,9 @@
+<ul>
+    <li *ngFor="let station of stationPrices.ListaEESSPrecio">{{station['Rótulo']}} {{station['Dirección']}}
+        <ul>
+            <li>Precio del gasóleo: <span>{{station['Precio Gasoleo A']}}</span></li>
+            <li>Precio de la gasolina: <span>{{station['Precio Gasolina 95 E5']}}</span></li>
+            <li>Precio del hidrógeno: <span>{{station['Precio Hidrogeno']}}</span></li>
+        </ul>
+    </li>
+</ul>
