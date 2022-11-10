@@ -12,7 +12,7 @@ export class StationService {
   constructor(private http: HttpClient) { }
 
   getAllStations():Observable<StationPricesResponse>{
-    return this.http.get<StationPricesResponse>(`${environment.API_URL_BASE}/EstacionesTerrestres/`)
+    return this.http.get<StationPricesResponse>(`https://raw.githubusercontent.com/alvarofmk/gasApp/master/src/assets/gasStations.json`)
   }
 
 }
