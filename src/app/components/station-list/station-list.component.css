@@ -9,3 +9,40 @@
 .gasStation{
     width: 20%;
 }
+.mainView{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+.filterItem{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.filterItem button{
+    margin-bottom: 15px;
+}
+.filters{
+    margin-left: 20px;
+}
+.loadingOverlay{
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 99;
+    background-color: rgba(255, 255, 255, 0.726);
+}
+mat-spinner{
+    margin-top: 45vh;
+    margin-left: 45%;
+}
+.locationButton{
+    color: black;
+    font-size: 1em;
+    transition: all 0.15s;
+}
+.locationButton:hover{
+    color: rgb(248, 58, 121);
+    font-size: 1.1em;
+    transition: all 0.15s;
+}

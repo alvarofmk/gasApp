@@ -1,58 +1,77 @@
-<mat-form-field appearance="fill">
-    <mat-label>Seleccione combustible</mat-label>
-    <mat-select [(ngModel)]="pricePicked" (selectionChange)="changePicked()">
-      <mat-option [value]="1">Biodiesel</mat-option>
-      <mat-option [value]="2">Bioetanol</mat-option>
-      <mat-option [value]="3">Gas Natural</mat-option>
-      <mat-option [value]="4">Gasoleo</mat-option>
-      <mat-option [value]="5">Gasoleo Premium</mat-option>
-      <mat-option [value]="6">Gasolina 95</mat-option>
-      <mat-option [value]="7">Gasolina 98</mat-option>
-      <mat-option [value]="8">Hidrogeno</mat-option>
-    </mat-select>
-</mat-form-field>
-<mat-icon (click)="invertSort()">sort</mat-icon>
-<mat-slider
-    [max]="maxPriceToShow"
-    [min]="0"
-    step="0.01"
-    [thumbLabel]="true"
-    [(ngModel)]="minPriceToShow"
-    aria-labelledby="example-name-label">
-</mat-slider>
-<mat-slider
-    [max]="5.00"
-    [min]="minPriceToShow"
-    step="0.01"
-    [thumbLabel]="true"
-    [(ngModel)]="maxPriceToShow"
-    aria-labelledby="example-name-label">
-</mat-slider>
-<button mat-stroked-button color="accent" (click)="reFilter()">Filter by price range</button>
-<mat-form-field appearance="fill">
-    <mat-label>Seleccione provincia</mat-label>
-    <mat-select [(ngModel)]="provincePicked" (selectionChange)="reFilter()">
-        <mat-option [value]="">--</mat-option>
-        <mat-option [value]="province.IDPovincia" *ngFor="let province of provinces">{{province.Provincia}}</mat-option>
-    </mat-select>
-</mat-form-field>
-<mat-form-field appearance="fill" *ngIf="provincePicked != '' && provincePicked != undefined">
-    <mat-label>Seleccione municipio</mat-label>
-    <mat-select [(ngModel)]="municipalityPicked" (selectionChange)="reFilter()">
-        <mat-option [value]="">--</mat-option>
-      <mat-option [value]="municipality.IDMunicipio" *ngFor="let municipality of municipalities">{{municipality.Municipio}}</mat-option>
-    </mat-select>
-</mat-form-field>
-<div class="container">
-    <ng-container *ngFor="let station of stations">
-        <mat-card class="gasStation">
-            <mat-card-title>{{station['Rótulo']}}</mat-card-title>
-            <mat-card-subtitle>{{station['Dirección']}}</mat-card-subtitle>
-            <mat-card-content>
-                <ul>
-                    <li>Precio: <span>{{station[price]}} € / litro</span></li>
-                </ul>
-            </mat-card-content>
-        </mat-card>
-    </ng-container>
+<div class="loadingOverlay" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="mainView">
+    <div class="filters">
+        <div class="filterItem">
+            <mat-form-field appearance="fill">
+                <mat-label>Seleccione combustible</mat-label>
+                <mat-select [(ngModel)]="pricePicked" (selectionChange)="changePicked()">
+                  <mat-option [value]="1">Biodiesel</mat-option>
+                  <mat-option [value]="2">Bioetanol</mat-option>
+                  <mat-option [value]="3">Gas Natural</mat-option>
+                  <mat-option [value]="4">Gasoleo</mat-option>
+                  <mat-option [value]="5">Gasoleo Premium</mat-option>
+                  <mat-option [value]="6">Gasolina 95</mat-option>
+                  <mat-option [value]="7">Gasolina 98</mat-option>
+                  <mat-option [value]="8">Hidrogeno</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-icon (click)="invertSort()">sort</mat-icon>
+        </div>
+        <div class="filterItem">
+            <mat-slider
+                [max]="maxPriceToShow"
+                [min]="0"
+                step="0.01"
+                [thumbLabel]="true"
+                [(ngModel)]="minPriceToShow"
+                aria-labelledby="example-name-label">
+            </mat-slider>
+        </div>
+        <div class="filterItem">
+            <mat-slider
+                [max]="5.00"
+                [min]="minPriceToShow"
+                step="0.01"
+                [thumbLabel]="true"
+                [(ngModel)]="maxPriceToShow"
+                aria-labelledby="example-name-label">
+            </mat-slider>
+        </div>
+        <div class="filterItem">
+            <button mat-stroked-button color="accent" (click)="reFilter()">Filter by price range</button>
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccione provincia</mat-label>
+            <mat-select [(ngModel)]="provincePicked" (selectionChange)="reFilter()">
+                <mat-option [value]="">--</mat-option>
+                <mat-option [value]="province.IDPovincia" *ngFor="let province of provinces">{{province.Provincia}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="provincePicked != '' && provincePicked != undefined">
+            <mat-label>Seleccione municipio</mat-label>
+            <mat-select [(ngModel)]="municipalityPicked" (selectionChange)="reFilter()">
+                <mat-option [value]="">--</mat-option>
+              <mat-option [value]="municipality.IDMunicipio" *ngFor="let municipality of municipalities">{{municipality.Municipio}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="filterItem" *ngIf="geoLocalized">
+            <button mat-stroked-button color="accent" (click)="sortByClosest()">Filter by closest</button>
+        </div>
+    </div>
+    <div class="container">
+        <ng-container *ngFor="let station of stations">
+            <mat-card class="gasStation">
+                <mat-card-title>{{station['Rótulo']}} <span><mat-icon class="locationButton" (click)="openLocation(station)">directions</mat-icon></span></mat-card-title>
+                <mat-card-subtitle>{{station['Dirección']}}</mat-card-subtitle>
+                <mat-card-subtitle *ngIf="geoLocalized">Distancia: {{calculateDistance(station)}} km</mat-card-subtitle>
+                <mat-card-content>
+                    <ul>
+                        <li>Precio: <span>{{station[price]}} € / litro</span></li>
+                    </ul>
+                </mat-card-content>
+            </mat-card>
+        </ng-container>
+    </div>
 </div>
