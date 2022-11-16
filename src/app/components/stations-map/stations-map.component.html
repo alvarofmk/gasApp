@@ -1,0 +1,16 @@
+<div>
+    <google-map height="400px"
+                width="750px"
+                [center]="userCoordinates"
+                [zoom]="15">
+                <map-marker #marker="mapMarker" *ngFor="let station of stationsList"
+                [position]="station['googlePosition']"
+                (mapClick)="openInfoWindow(marker, station)"></map-marker>
+                <map-info-window>
+                    <h3>{{infoWindowSelected['Rótulo']}}</h3>
+                    <br>
+                    <h5>{{infoWindowSelected['Municipio']}} - {{infoWindowSelected['C.P.']}}</h5>
+                    <p>{{infoWindowSelected['Dirección']}}</p>
+                </map-info-window>
+    </google-map>
+</div>

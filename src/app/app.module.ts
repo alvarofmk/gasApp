@@ -8,13 +8,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StationListComponent } from './components/station-list/station-list.component';
 import { MaterialImportsModule } from './material-imports/material-imports.module';
 import { FormsModule } from '@angular/forms';
+import { StationsMapComponent } from './components/stations-map/stations-map.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    StationListComponent
+    StationListComponent,
+    StationsMapComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +25,8 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialImportsModule,
-    FormsModule
+    FormsModule,
+    GoogleMapsModule
   ],
   exports: [
     MaterialImportsModule

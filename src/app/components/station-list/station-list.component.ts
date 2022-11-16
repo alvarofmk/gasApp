@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Observable, map, catchError, of } from 'rxjs';
 import { StationPrices, StationPricesResponse } from 'src/app/interfaces/gas-stations.interface';
 import { Municipality } from 'src/app/interfaces/municipalities.interface';
 import { Province, ProvinceResponse } from 'src/app/interfaces/province.interface';
@@ -26,7 +28,9 @@ export class StationListComponent implements OnInit {
   loading: boolean = true;
   userLat: number = 0;
   userLng: number = 0;
+  
   geoLocalized: boolean = false;
+  userCoordinates: google.maps.LatLngLiteral = {} as google.maps.LatLngLiteral;
 
   constructor(private stationService: StationService) { }
 
@@ -40,6 +44,7 @@ export class StationListComponent implements OnInit {
       this.price = "Precio Gasolina 95 E5";
       this.stationPrices = response;
       this.stations = response.ListaEESSPrecio.filter(station => station[this.price] != '')
+      this.stations.forEach(station => station['googlePosition'] = this.getPositionAsLatLngLiteral(station));
       this.sort();
       this.loading = false;
     })
@@ -109,9 +114,9 @@ export class StationListComponent implements OnInit {
 
   invertedSort(){
       this.stations.sort((station1, station2) => {
-        if(this.toNumber(station1[this.price]) < this.toNumber(station2[this.price])){
+        if(this.toNumber(station1[this.price] as string) < this.toNumber(station2[this.price] as string)){
           return 1;
-        }else if(this.toNumber(station1[this.price]) > this.toNumber(station2[this.price])){
+        }else if(this.toNumber(station1[this.price] as string) > this.toNumber(station2[this.price] as string)){
           return -1;
         }else{
           return 0;
@@ -121,9 +126,9 @@ export class StationListComponent implements OnInit {
 
   sort(){
     this.stations.sort((station1, station2) => {
-      if(this.toNumber(station1[this.price]) > this.toNumber(station2[this.price])){
+      if(this.toNumber(station1[this.price] as string) > this.toNumber(station2[this.price] as string)){
         return 1;
-      }else if(this.toNumber(station1[this.price]) < this.toNumber(station2[this.price])){
+      }else if(this.toNumber(station1[this.price] as string) < this.toNumber(station2[this.price] as string)){
         return -1;
       }else{
         return 0;
@@ -144,7 +149,7 @@ export class StationListComponent implements OnInit {
   }
 
   reFilter(){
-    this.stations = this.stationPrices.ListaEESSPrecio.filter(station => station[this.price] != '' && this.toNumber(station[this.price]) > this.minPriceToShow &&  this.toNumber(station[this.price]) < this.maxPriceToShow);
+    this.stations = this.stationPrices.ListaEESSPrecio.filter(station => station[this.price] != '' && this.toNumber(station[this.price] as string) > this.minPriceToShow &&  this.toNumber(station[this.price] as string) < this.maxPriceToShow);
     if(this.provincePicked != '' && this.provincePicked != undefined){
       this.stations = this.stations.filter(station => station['IDProvincia'] == this.provincePicked);
       this.assignMunicipalities();
@@ -168,8 +173,6 @@ export class StationListComponent implements OnInit {
   openLocation(gasStation: StationPrices){
     debugger;
     window.open(`https://www.google.es/maps/dir/${this.userLat},${this.userLng}/${gasStation['Latitud'].replace(",",".")},${gasStation['Longitud (WGS84)'].replace(",",".")}`, "_blank");
-    //`https://www.google.es/maps/@${gasStation['Latitud'].replace(",",".")},${gasStation['Longitud (WGS84)'].replace(",",".")},16z`
-    //`https://www.google.es/maps/dir/${this.userLat},${this.userLng}/'${this.userLat},${this.userLng}'/${gasStation['Latitud'].replace(",",".")},${gasStation['Longitud (WGS84)'].replace(",",".")},14z`
   }
 
   getLocation() {
@@ -183,6 +186,7 @@ export class StationListComponent implements OnInit {
           console.log(this.userLat);
           console.log(this.userLng);
           this.geoLocalized = true;
+          this.userCoordinates = {lat: this.userLat, lng: this.userLng};
         }
       },
         (error) => console.log(error));
@@ -215,6 +219,10 @@ export class StationListComponent implements OnInit {
 
     // calculate the result
     return Math.round((c * r) * 100) / 100;
+  }
+
+  getPositionAsLatLngLiteral(station: StationPrices): google.maps.LatLngLiteral{
+    return {lat: Number(station.Latitud.replace(",",".")), lng: Number(station['Longitud (WGS84)'].replace(",","."))};
   }
 
 }

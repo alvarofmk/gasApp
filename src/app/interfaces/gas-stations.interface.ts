@@ -31,6 +31,7 @@ export interface StationPrices {
     'IDMunicipio': string;
     'IDProvincia': string;
     'IDCCAA': string;
+    'googlePosition': google.maps.LatLngLiteral;
 }
 
 export interface StationPricesResponse {
