@@ -17,7 +17,7 @@
                   <mat-option [value]="8">Hidrogeno</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-icon (click)="invertSort()">sort</mat-icon>
+            <!-- <mat-icon (click)="invertSort()">sort</mat-icon> -->
         </div>
         <div class="filterItem">
             <mat-slider
@@ -56,9 +56,10 @@
               <mat-option [value]="municipality.IDMunicipio" *ngFor="let municipality of municipalities">{{municipality.Municipio}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <div class="filterItem" *ngIf="geoLocalized">
+        
+        <!-- <div class="filterItem" *ngIf="geoLocalized">
             <button mat-stroked-button color="accent" (click)="sortByClosest()">Filter by closest</button>
-        </div>
+        </div> -->
     </div>
     <div>
         <app-stations-map [stationsList]="stations" [userCoordinates]="userCoordinates"></app-stations-map>

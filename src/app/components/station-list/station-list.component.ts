@@ -153,6 +153,8 @@ export class StationListComponent implements OnInit {
     if(this.provincePicked != '' && this.provincePicked != undefined){
       this.stations = this.stations.filter(station => station['IDProvincia'] == this.provincePicked);
       this.assignMunicipalities();
+    }else{
+      this.municipalityPicked = '';
     }
     if(this.municipalityPicked != '' && this.municipalityPicked != undefined){
       this.stations = this.stations.filter(station => station['IDMunicipio'] == this.municipalityPicked);
